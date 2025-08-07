@@ -12,7 +12,7 @@ namespace Expense_Tracker
         public List<Expense> expenses = new List<Expense>();
         public ExpenseManager() 
         { 
-            List<Expense> expenses = FileService.LoadExpensesFromCsv();
+            expenses = FileService.LoadExpensesFromCsv();
         }
         
 
@@ -34,31 +34,12 @@ namespace Expense_Tracker
             });
         }
 
-        public void Edit(int id, int changer, string description = "", decimal amount = 0.0m, Expense.Category category = Expense.Category.Utilities, Expense.Currency currency = Expense.Currency.KZT) 
+        public void Edit(int id, int changer, decimal amount) 
         {
             Expense? expense = expenses.FirstOrDefault(s => s.Id == id);
             if (expense != null)
             {
-                switch (changer)
-                    {
-                    case 1:
-                        expense.ExpenseCategory = category;
-                        break;
-                    case 2:
-                        expense.Description = description;
-                        break;
-                    case 3:
-                        expense.Amount = amount;
-                        break;
-                    case 4:
-                        expense.ExpenseCurrency = currency;
-                        break;
-                    default:
-                        Console.WriteLine("Неверный выбор");
-                        return;
-                }
-
-
+                expense.Amount = amount;
                 Console.WriteLine("Изменения внесены");
             }
             else
@@ -67,13 +48,57 @@ namespace Expense_Tracker
             }
         }
 
+        public void Edit(int id, int changer, string description = "")
+        {
+            Expense? expense = expenses.FirstOrDefault(s => s.Id == id);
+            if (expense != null)
+            {
+                expense.Description = description;
+                Console.WriteLine("Изменения внесены");
+            }
+            else
+            {
+                Console.WriteLine("Задачи с таким ID нет");
+            }
+        }
+
+        public void Edit(int id, int changer, Expense.Category category)
+        {
+            Expense? expense = expenses.FirstOrDefault(s => s.Id == id);
+            if (expense != null)
+            {
+                expense.ExpenseCategory = category;
+                Console.WriteLine("Изменения внесены");
+            }
+            else
+            {
+                Console.WriteLine("Задачи с таким ID нет");
+            }
+        }
+
+        public void Edit(int id, int changer, Expense.Currency currency)
+        {
+            Expense? expense = expenses.FirstOrDefault(s => s.Id == id);
+            if (expense != null)
+            {
+                expense.ExpenseCurrency = currency;
+                Console.WriteLine("Изменения внесены");
+            }
+            else
+            {
+                Console.WriteLine("Задачи с таким ID нет");
+            }
+        }
+
+
+
+
         public void Delete(int id) 
         {
             Expense? expense = expenses.FirstOrDefault(s => s.Id == id);
             if (expense != null)
             {
                 expenses.RemoveAll(t => t.Id == id);
-                Console.WriteLine($"Задача {id} удалена успешно");
             }
         }
 

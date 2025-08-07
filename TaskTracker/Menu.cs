@@ -20,12 +20,16 @@ namespace Expense_Tracker
                 Console.WriteLine("3. Удалить данные о расходах");
                 Console.WriteLine("4. Показать все расходы");
                 Console.WriteLine("5. Показать сортированные расходы");
-                Console.WriteLine("0. Exit");
-                Console.Write("Choose an option: ");
+                Console.WriteLine("6. Сохранить изменения");
+                Console.WriteLine("0. Выход из программы");
+                Console.Write("Выберите действие: ");
                 string? input = Console.ReadLine();
-                
-                if (input == "0")
+
+                if (input == "0") 
+                {
                     break;
+                }
+                
                 switch (input)
                 {
                     case "1":
@@ -72,49 +76,154 @@ namespace Expense_Tracker
                         string? amountinput = Console.ReadLine();
                         decimal amount = decimal.TryParse(amountinput, out decimal result) ? result : 0.0m;
 
-                        expenseManager.Add(category, description, amount, Expense.Currency.KZT);
+                        Console.WriteLine("Введите валюту:");
+                        Console.WriteLine("1. KZT");
+                        Console.WriteLine("2. USD");
+                        Console.WriteLine("3. EUR");
+                        Console.WriteLine("4. GBP");
+                        Console.WriteLine("5. JPY");
+                        Console.WriteLine("6. CNY");
+                        string? currencyInput = Console.ReadLine();
+                        Expense.Currency currency = Expense.Currency.KZT; // Default value
+                        
+                        switch (currencyInput)
+                        {
+                            case "1":
+                                currency = Expense.Currency.KZT;
+                                break;
+                            case "2":
+                                currency = Expense.Currency.USD;
+                                break;
+                            case "3":
+                                currency = Expense.Currency.EUR;
+                                break;
+                            case "4":
+                                currency = Expense.Currency.GBP;
+                                break;
+                            case "5":
+                                currency = Expense.Currency.JPY;
+                                break;
+                            case "6":
+                                currency = Expense.Currency.CNY;
+                                break;
+                            default:
+                                Console.WriteLine("Неверный выбор валюты.");
+                                continue;
+                        }
+                        expenseManager.Add(category, description, amount, currency);
                         Console.WriteLine("Расходы добавлены успешно.");
 
                         break;
+
                     case "2":
                         Console.WriteLine("Введите ID расхода для изменения:");
-                        int idToEdit = int.TryParse(Console.ReadLine(), out int id) ? id : 0;
+                        int editId = int.TryParse(Console.ReadLine(), out int id) ? id : 0;
 
                         Console.WriteLine("Выберите пункт для изменения");
                         Console.WriteLine("1. Описание");
                         Console.WriteLine("2. Сумму");
+                        Console.WriteLine("3. Категорию");
+                        Console.WriteLine("4. Вылюту");
 
-                        int toEdit = int.TryParse(Console.ReadLine(), out int ed) ? ed : 0;
+                        int editInput = int.TryParse(Console.ReadLine(), out int ed) ? ed : 0;
 
-                        switch (toEdit)
+                        switch (editInput)
                         {
                             case 1:
                                 Console.WriteLine("Введите новое описание:");
                                 string? newDescription = Console.ReadLine() ?? string.Empty;
-                                expenseManager.Edit(idToEdit, toEdit, newDescription);
-                                break;
+                                expenseManager.Edit(editId, editInput, description: newDescription);
+                            break;
+
                             case 2:
                                 Console.WriteLine("Введите новую сумму:");
                                 string? amountInput = Console.ReadLine();
                                 decimal newAmount = decimal.TryParse(amountInput, out decimal amountResult) ? amountResult : 0.0m;
-                                expenseManager.Edit(idToEdit, toEdit, amount: newAmount);
-                                break;
-                            default:
-                                Console.WriteLine("Неверный выбор пункта для изменения.");
-                                continue;
-                        }
+                                expenseManager.Edit(editId, editInput, amount: newAmount);
+                            break;
 
-                        break;
+                            case 3: 
+                                Console.WriteLine("Введите новую категорию:");
+                                Console.WriteLine("1. Food");
+                                Console.WriteLine("2. Transport");
+                                Console.WriteLine("3. Entertainment");
+                                Console.WriteLine("4. Utilities");
+                                Console.WriteLine("5. Health");
+                                Console.WriteLine("6. Other");
+                                string? newCategoryInput = Console.ReadLine();
+                                Expense.Category newCategory = Expense.Category.Utilities;
+                                switch (newCategoryInput)
+                                {
+                                    case "1":
+                                        newCategory = Expense.Category.Food;
+                                        break;
+                                    case "2":
+                                        newCategory = Expense.Category.Transport;
+                                        break;
+                                    case "3":
+                                        newCategory = Expense.Category.Entertainment;
+                                        break;
+                                    case "4":
+                                        newCategory = Expense.Category.Utilities;
+                                        break;
+                                    case "5":
+                                        newCategory = Expense.Category.Health;
+                                        break;
+                                    case "6":
+                                        newCategory = Expense.Category.Other;
+                                        break;
+                                    default:
+                                        Console.WriteLine("Неверный выбор категории.");
+                                        continue;
+                                }
+                                expenseManager.Edit(editId, editInput, category: newCategory);
+                            break;
+
+                            case 4:
+                                    Console.WriteLine("Введите новую валюту:");
+                                    string? newCurrencyInput = Console.ReadLine();
+                                    Expense.Currency newCurrency = Expense.Currency.KZT;
+                                switch (newCurrencyInput)
+                                {
+                                    case "1":
+                                        newCurrency = Expense.Currency.KZT;
+                                        break;
+                                    case "2":
+                                        newCurrency = Expense.Currency.USD;
+                                        break;
+                                    case "3":
+                                        newCurrency = Expense.Currency.EUR;
+                                        break;
+                                    case "4":
+                                        newCurrency = Expense.Currency.GBP;
+                                        break;
+                                    case "5":
+                                        newCurrency = Expense.Currency.JPY;
+                                        break;
+                                    case "6":
+                                        newCurrency = Expense.Currency.CNY;
+                                        break;
+                                    default:
+                                        Console.WriteLine("Неверный выбор пункта для изменения.");
+                                        continue;
+                                } 
+                                expenseManager.Edit(editId, editInput, currency: newCurrency);
+                            break;
+                        }
+                    break;
+
                     case "3":
                         Console.WriteLine("Введите ID для удаления:");
                         int toDelete = int.TryParse(Console.ReadLine(), out int del) ? del : 0;
                         expenseManager.Delete(toDelete);
                         Console.WriteLine("Расходы удалены успешно.");
                         break;
+
                     case "4":
                         Console.WriteLine("Все расходы:");
                         expenseManager.ShowAll();
                         break;
+
                     case "5":
                         Console.WriteLine("Выбирите тип сортировки:");
                         Console.WriteLine("1. По дате");
@@ -126,15 +235,16 @@ namespace Expense_Tracker
                         expenseManager.ViewSorted(sortOption);
                         break;
 
-                    case "0":
+                    case "6":
                         FileService.SaveExpensesToCsv(expenseManager.expenses);
+                        Console.WriteLine("Выход из программы...");
                         break;
 
                     default:
-                        Console.WriteLine("Invalid option, please try again.");
+                        Console.WriteLine("Неправильный ввод, попробуйте снова.");
                         break;
                 }
-                Console.WriteLine("Press any key to continue...");
+                Console.WriteLine("Нажмите на любую клавишу чтоб продолжить");
                 Console.ReadKey();
             }
         }

@@ -11,7 +11,7 @@ namespace Expense_Tracker
 
         public static void SaveExpensesToCsv(List<Expense> expenses)
         {
-            using (StreamWriter writer = new StreamWriter("File.csv", false)) 
+            using (StreamWriter writer = new StreamWriter(@"C:\Users\shonk\source\repos\TaskTracker\TaskTracker\bin\Debug\net8.0\File.csv", false)) 
             {
                 writer.WriteLine("Id,Date,Category,Description,Amount,Currency");
 
@@ -34,16 +34,16 @@ namespace Expense_Tracker
         {
             List<Expense> loadedExpenses = new List<Expense>();
 
-            if (!File.Exists("File.csv"))
+            if (!File.Exists(@"C:\Users\shonk\source\repos\TaskTracker\TaskTracker\bin\Debug\net8.0\File.csv"))
             {
                 Console.WriteLine("Файл не найден.");
                 return loadedExpenses;
             }
 
-            using (StreamReader reader = new StreamReader("File.csv"))
+            using (StreamReader reader = new StreamReader(@"C:\Users\shonk\source\repos\TaskTracker\TaskTracker\bin\Debug\net8.0\File.csv"))
             {
                 string? line;
-                reader.ReadLine();
+                reader.ReadLine(); // Пропустить заголовок
 
                 while ((line = reader.ReadLine()) != null)
                 {
@@ -61,6 +61,7 @@ namespace Expense_Tracker
                         loadedExpenses.Add(new Expense
                         {
                             Id = id,
+                            Date = date,
                             ExpenseCategory = category,
                             Amount = amount,
                             Description = description,
