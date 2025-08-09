@@ -127,15 +127,18 @@ namespace Expense_Tracker
             }
             View(expenses);
         }
-        public void View(List<Expense> expensestoshow) 
+        public void View(List<Expense> expensesToShow) 
         {
+            decimal totalAmount = expensesToShow.Sum(e => e.Amount);
             Console.WriteLine("{0,-5} | {1,-15} | {2,-10} | {3,-50} | {4,-10} | {5,-15}", "ID", "Дата", "Категория", "Описание", "Сумма", "Валюта");
             Console.WriteLine(new string('-', 120));
 
-            foreach (var expense in expensestoshow)
+            foreach (var expense in expensesToShow)
             {
                 Console.WriteLine($"{expense.Id,-5} | {expense.Date.ToShortDateString(),-15} | {expense.ExpenseCategory,-10} | {expense.Description,-50} | {expense.Amount,-10} | {expense.ExpenseCurrency,-15}");
             }
+            Console.WriteLine(new string('-', 120));
+            Console.WriteLine($"{"",-72}  {"Итоговая сумма: "}  {totalAmount,-11}  {Expense.Currency.KZT,-15}"); // Предполагаем, что итоговая сумма в KZT, т.к. это валюта по умолчанию и выбор не был сделан    
         }
 
         public void ViewSorted(int sortby) 
