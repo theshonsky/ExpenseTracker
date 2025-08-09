@@ -4,11 +4,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Expense_Tracker.Expense;
 
 namespace Expense_Tracker
 {
     internal class ExpenseManager
     {
+        public enum EditType
+        {
+            Category,
+            Description,
+            Amount,
+            Currency
+        }
         public List<Expense> expenses = new List<Expense>();
         public ExpenseManager() 
         { 
@@ -34,60 +42,68 @@ namespace Expense_Tracker
             });
         }
 
-        public void Edit(int id, int changer, decimal amount) 
-        {
-            Expense? expense = expenses.FirstOrDefault(s => s.Id == id);
-            if (expense != null)
-            {
-                expense.Amount = amount;
-                Console.WriteLine("Изменения внесены");
-            }
-            else
-            {
-                Console.WriteLine("Задачи с таким ID нет");
-            }
-        }
+       
 
-        public void Edit(int id, int changer, string description = "")
+        public void Edit(int id, EditType type, object newValue)
         {
             Expense? expense = expenses.FirstOrDefault(s => s.Id == id);
-            if (expense != null)
-            {
-                expense.Description = description;
-                Console.WriteLine("Изменения внесены");
-            }
-            else
+            if (expense == null)
             {
                 Console.WriteLine("Задачи с таким ID нет");
+                
             }
-        }
-
-        public void Edit(int id, int changer, Expense.Category category)
-        {
-            Expense? expense = expenses.FirstOrDefault(s => s.Id == id);
-            if (expense != null)
+            
+            switch (type)
             {
-                expense.ExpenseCategory = category;
-                Console.WriteLine("Изменения внесены");
+                case EditType.Category:
+                    if (newValue is Expense.Category category)
+                    {
+                        expense.ExpenseCategory = category;
+                        Console.WriteLine("Категория изменена");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Неверный тип данных для категории");
+                    }
+                    break;
+                case EditType.Description:
+                    if (newValue is string description)
+                    {
+                        expense.Description = description;
+                        Console.WriteLine("Описание изменено");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Неверный тип данных для описания");
+                    }
+                    break;
+                case EditType.Amount:
+                    if (newValue is decimal amount)
+                    {
+                        expense.Amount = amount;
+                        Console.WriteLine("Сумма изменена");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Неверный тип данных для суммы");
+                    }
+                    break;
+                case EditType.Currency:
+                    if (newValue is Expense.Currency currency)
+                    {
+                        expense.ExpenseCurrency = currency;
+                        Console.WriteLine("Валюта изменена");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Неверный тип данных для валюты");
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Неверный тип редактирования");
+                    break;
             }
-            else
-            {
-                Console.WriteLine("Задачи с таким ID нет");
-            }
-        }
-
-        public void Edit(int id, int changer, Expense.Currency currency)
-        {
-            Expense? expense = expenses.FirstOrDefault(s => s.Id == id);
-            if (expense != null)
-            {
-                expense.ExpenseCurrency = currency;
-                Console.WriteLine("Изменения внесены");
-            }
-            else
-            {
-                Console.WriteLine("Задачи с таким ID нет");
-            }
+            
         }
 
 
