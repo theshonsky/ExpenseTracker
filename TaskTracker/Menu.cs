@@ -21,12 +21,14 @@ namespace Expense_Tracker
                 Console.WriteLine("4. Показать все расходы");
                 Console.WriteLine("5. Показать сортированные расходы");
                 Console.WriteLine("6. Сохранить изменения");
-                Console.WriteLine("0. Выход из программы");
+                Console.WriteLine("0. Сохранить и выйти из программы");
                 Console.Write("Выберите действие: ");
                 string? input = Console.ReadLine();
 
                 if (input == "0") 
                 {
+                    FileService.SaveExpensesToCsv(expenseManager.expenses);
+                    Console.WriteLine("Выход из программы...");
                     break;
                 }
                 
@@ -132,14 +134,14 @@ namespace Expense_Tracker
                             case 1:
                                 Console.WriteLine("Введите новое описание:");
                                 string? newDescription = Console.ReadLine() ?? string.Empty;
-                                expenseManager.Edit(editId, editInput, description: newDescription);
+                                expenseManager.Edit(editId, ExpenseManager.EditType.Description, newDescription);
                             break;
 
                             case 2:
                                 Console.WriteLine("Введите новую сумму:");
                                 string? amountInput = Console.ReadLine();
                                 decimal newAmount = decimal.TryParse(amountInput, out decimal amountResult) ? amountResult : 0.0m;
-                                expenseManager.Edit(editId, editInput, amount: newAmount);
+                                expenseManager.Edit(editId, ExpenseManager.EditType.Amount, newAmount);
                             break;
 
                             case 3: 
@@ -176,7 +178,7 @@ namespace Expense_Tracker
                                         Console.WriteLine("Неверный выбор категории.");
                                         continue;
                                 }
-                                expenseManager.Edit(editId, editInput, category: newCategory);
+                                expenseManager.Edit(editId, ExpenseManager.EditType.Category,newCategory);
                             break;
 
                             case 4:
@@ -207,7 +209,7 @@ namespace Expense_Tracker
                                         Console.WriteLine("Неверный выбор пункта для изменения.");
                                         continue;
                                 } 
-                                expenseManager.Edit(editId, editInput, currency: newCurrency);
+                                expenseManager.Edit(editId, ExpenseManager.EditType.Currency, newCurrency);
                             break;
                         }
                     break;
@@ -233,11 +235,6 @@ namespace Expense_Tracker
                         int sortOption = int.TryParse(Console.ReadLine(), out int sort) ? sort : 0;
 
                         expenseManager.ViewSorted(sortOption);
-                        break;
-
-                    case "6":
-                        FileService.SaveExpensesToCsv(expenseManager.expenses);
-                        Console.WriteLine("Выход из программы...");
                         break;
 
                     default:
